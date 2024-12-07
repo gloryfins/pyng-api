@@ -1,0 +1,6 @@
+SpeechRecognition
+pyaudio
+gtts
+pydub
+flask
+werkzeug
