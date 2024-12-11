@@ -1,35 +1,36 @@
 from flask import Flask, request, jsonify
+from functions.find_products import find_matching_products
+from functions.google_maps_scrapper import scrape_google_maps
 from functions.speech_recognizer_wav import recognize_speech_from_wav
-import os
-
 from functions.text_extract import extract_text_to_json
+import json
+import os
+import time
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'audio/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+@app.route('/stores', methods=['POST'])
+def stores():
+    query = "blibli store near me"
+    results = scrape_google_maps(query, max_results=3)
+    response = {"data": results}
+    response_json = json.dumps(response, indent=2)
+    return response_json, 200
 
-@app.route('/process', methods=['POST'])
-def process():
-    # Get the JSON data from the request body
-    data = request.get_json()
-
-    # Ensure that the 'filename' key exists in the JSON data
-    if not data or 'filename' not in data:
-        return jsonify({'message': 'Filename is missing in the request body'}), 400
-
-    filename = data['filename']
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-    transcribed_audio = recognize_speech_from_wav(file_path)
-    return jsonify({'message': transcribed_audio, 'file_path': file_path}), 200
-
-@app.route('/test', methods=['GET'])
-def test():
-    extract_text_to_json("I want to buy handphone Samsung with under 2 million rupiah")
-
+@app.route('/products', methods=['POST'])
+def products():
+    query = request.get_json()
+    keyword = str(query['query'])
+    response = extract_text_to_json(keyword)
+    while True:
+        if json.loads(response.content) is not None:
+            response_json = json.loads(response.content)
+            break
+        else:
+            print("Waiting for response...")
+            time.sleep(1)
+    matching_products = find_matching_products(response_json)
+    return matching_products, 200
 
 if __name__ == '__main__':
-    # Make sure the 'audio' folder exists
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     app.run(debug=True, host='0.0.0.0', port=5000)

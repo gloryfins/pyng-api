@@ -1,10 +1,10 @@
 import json
+import time
 
 from langchain_ollama import ChatOllama
 
 # Instantiate the chat model
 llm = ChatOllama(model="codellama:7b")  # Or use another model like "codellama"
-
 
 def extract_text_to_json(text):
     # Create a prompt template that works with the model
@@ -24,17 +24,12 @@ def extract_text_to_json(text):
     formatted_prompt = template.format(text=text)
 
     # Use the `invoke()` method with the formatted prompt string
-    response = llm.invoke([{"role": "user", "content": formatted_prompt}])
-
-    print(response.content)
-
-    return response.content
-
-#  how to extract the value from json
-# # extract value
-# parsed_response = json.loads(response.content)
-# print(parsed_response)
-# brand = parsed_response.get("brand", "Brand not found")
-# price = parsed_response.get("price", "Price not found")
-# type = parsed_response.get("type", "Price not found")
-# print(brand, price, type)
+    while True:
+        print("Waiting for response...")
+        response = llm.invoke([{"role": "user", "content": formatted_prompt}])
+        if response is not None:
+            print(response)
+            return response
+        else:
+            print("Waiting for response...")
+            time.sleep(2)

@@ -5,3 +5,7 @@ pydub
 flask
 werkzeug
 langchain_ollama
+selenium
+bs4
+pyperclip
+webdriver_manager
