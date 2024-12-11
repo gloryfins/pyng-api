@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from functions.speech_recognizer_wav import recognize_speech_from_wav
-from werkzeug.utils import secure_filename
 import os
+
+from functions.text_extract import extract_text_to_json
 
 app = Flask(__name__)
 
@@ -22,6 +23,11 @@ def process():
 
     transcribed_audio = recognize_speech_from_wav(file_path)
     return jsonify({'message': transcribed_audio, 'file_path': file_path}), 200
+
+@app.route('/test', methods=['GET'])
+def test():
+    extract_text_to_json("I want to buy handphone Samsung with under 2 million rupiah")
+
 
 if __name__ == '__main__':
     # Make sure the 'audio' folder exists
