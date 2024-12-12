@@ -37,12 +37,14 @@ def scrape_google_maps(query, max_results=3):
                 time.sleep(1)
 
                 name = driver.find_element(By.CLASS_NAME, "DUwDvf").text
+                if "Bliblimart" in name:
+                    continue
                 address = driver.find_element(By.CLASS_NAME, "Io6YTe").text
 
                 place_url = driver.current_url
 
                 try:
-                    image = driver.find_element(By.CSS_SELECTOR, "img[jsname='Q4LuWd']").get_attribute("src")
+                    image = driver.find_element(By.XPATH, ".//div[contains(@class,'RZ66Rb')]//img").get_attribute("src")
                 except Exception as e:
                     image = None
                 
