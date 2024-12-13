@@ -6,32 +6,40 @@ def find_matching_products(criteria):
     current = 0
     data = load_file()
     matching_products = []
-    result = check_number(criteria["price"])
-    print(result)
+    status=False
+    if criteria["price"]:
+        result = check_number(criteria["price"])
+        status = True
+        print(result)
     for product in data:
-        if (criteria["brand"].lower() in product["name"].lower() or
-            criteria["type"].lower() in product["name"].lower()):
+        if ((criteria["brand"].lower() in product["name"].lower()) or
+                (criteria["type"].lower() and criteria["type"].lower() in product["name"].lower())):
             if product["discounted_price"] ==0:
                 product["price"] = product["original_price"]
             else:
                 product["price"] = product["discounted_price"]
+                product["discount_percentage"] = int((product["original_price"]-product["price"])/product["original_price"]*100)
 
-            if result["criteria"]==">":
-                if product["price"] > int(result["num"]):
-                    matching_products.append(product)
-                    current += 1
-            elif result["criteria"]=="<":
-                if product["price"] < int(result["num"]):
-                    matching_products.append(product)
-                    current += 1
-            elif result["criteria"]=="<=":
-                if product["price"] <= int(result["num"]):
-                    matching_products.append(product)
-                    current += 1
-            elif result["criteria"]==">=":
-                if product["price"] >= int(result["num"]):
-                    matching_products.append(product)
-                    current += 1
+            if status:
+                if result["criteria"]==">":
+                    if product["price"] > int(result["num"]):
+                        matching_products.append(product)
+                        current += 1
+                elif result["criteria"]=="<":
+                    if product["price"] < int(result["num"]):
+                        matching_products.append(product)
+                        current += 1
+                elif result["criteria"]=="<=":
+                    if product["price"] <= int(result["num"]):
+                        matching_products.append(product)
+                        current += 1
+                elif result["criteria"]==">=":
+                    if product["price"] >= int(result["num"]):
+                        matching_products.append(product)
+                        current += 1
+            else:
+                matching_products.append(product)
+                current += 1
 
         if (current > max):
             current = 0

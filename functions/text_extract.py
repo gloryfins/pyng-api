@@ -12,8 +12,8 @@ def extract_text_to_json(text):
     You are a helpful assistant. Given the sentence below, extract the following details and return them in the JSON format:
 
     1. The brand of the product (e.g., Xiaomi).
-    2. The price range (e.g., for 'under 2 million', return "<2000000").
-    3. the type of handphone (e.g., android).
+    2. The price range (e.g., for 'under 2 million', return "<2000000"). If no price is mentioned, leave it empty String.
+    3. the type of handphone (e.g., android, iPhone).
 
     Sentence: {text}
 

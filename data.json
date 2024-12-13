@@ -138,7 +138,7 @@
         "image_url": "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//100/MTA-53912377/apple_iphone_13_full36_nzelmtg5.jpg?w=355",
         "category": "IPHONE",
         "original_price": 8998999,
-        "discounted_price": 0,
+        "discounted_price": 8998999,
         "rating": 4.9,
         "sold_unit": 6800
     },

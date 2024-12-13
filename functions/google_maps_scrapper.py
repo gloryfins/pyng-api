@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 import json
 import time
 
-def scrape_google_maps(query, max_results=3):
+def scrape_google_maps(query, max_results=5):
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
@@ -47,15 +47,15 @@ def scrape_google_maps(query, max_results=3):
                     image = driver.find_element(By.XPATH, ".//div[contains(@class,'RZ66Rb')]//img").get_attribute("src")
                 except Exception as e:
                     image = None
-                
-                results.append({
-                    "name": name,
-                    "address": address,
-                    "url": place_url,
-                    "image": image
-                })
 
-                scraped_count += 1
+                if image!=None:
+                    results.append({
+                        "name": name,
+                        "address": address,
+                        "url": place_url,
+                        "image": image
+                    })
+                    scraped_count += 1
 
             except Exception as e:
                 print(f"Error while scraping result: {e}")
