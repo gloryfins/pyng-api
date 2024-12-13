@@ -9,3 +9,4 @@ selenium
 bs4
 pyperclip
 webdriver_manager
+flask-cors

@@ -3,12 +3,14 @@ import time
 import random
 
 from flask import Flask, request
+from flask_cors import CORS
 
 from functions.find_products import find_matching_products
 from functions.google_maps_scrapper import scrape_google_maps
 from functions.text_extract import extract_text_to_json
 
 app = Flask(__name__)
+CORS(app, origins="http://localhost:3000")
 
 @app.route('/stores', methods=['POST'])
 def stores():
@@ -25,7 +27,7 @@ def stores():
 @app.route('/products', methods=['POST'])
 def products():
     query = request.get_json()
-    keyword = str(query['query'])
+    keyword = str(query['userText'])
     response = extract_text_to_json(keyword)
     while True:
         if json.loads(response.content) is not None:
